@@ -1,5 +1,14 @@
 ## LazyLibrarian
 
+###
+ToDo:
+Going to build upon this, going to move this away from google books and introduce a more simple search feature.
+Going to use ISBN number ( universally acknowledged standard ) as Unique Identifier for books, might be able to include comic in the end as well, not sure if that is the route i want to take this.
+Dump torrents for now and keep on running on NZB's due to easier to parse, might re-include Torrents when a solid base is available
+A lot of code rewriting
+
+:Dorbian
+
 #### IMPORTANT UPDATE
 As Mar2zz can no longer maintain LazyLibrarian, i have taken over.
 I don't have a lot of free time, but i will try my best to get a usable application.
