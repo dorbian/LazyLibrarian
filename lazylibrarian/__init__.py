@@ -1,6 +1,14 @@
+#Reviewed document, most should be noted down now, still a few minor, most is pep8 compliant now
 from __future__ import with_statement
 
-import os, sys, subprocess, threading, cherrypy, webbrowser, sqlite3
+import os
+import sys
+import subprocess
+# review threading isn't used, useless import (Dorbian)
+import threading
+import cherrypy
+import webbrowser
+import sqlite3
 
 import datetime
 
@@ -30,7 +38,7 @@ __INITIALIZED__ = False
 started = False
 
 DATADIR = None
-DBFILE=None
+DBFILE = None
 CONFIGFILE = None
 CFG = None
 
@@ -79,10 +87,11 @@ NEWZBIN_PASSWORD = None
 SEARCH_INTERVAL = 360
 SCAN_INTERVAL = 10
 
+
 def CheckSection(sec):
     """ Check if INI section exists, if not create it """
     try:
-        CFG[sec]
+        CFG[sec]    # review possible Bogus Statement ? (Dorbian)
         return True
     except:
         CFG[sec] = {}
@@ -91,6 +100,8 @@ def CheckSection(sec):
 #################################################################################
 ## Check_setting_int                                                            #
 #################################################################################
+
+
 #def minimax(val, low, high):
 #    """ Return value forced within range """
 #    try:
@@ -106,6 +117,8 @@ def CheckSection(sec):
 ################################################################################
 # Check_setting_int                                                            #
 ################################################################################
+
+
 def check_setting_int(config, cfg_name, item_name, def_val):
     try:
         my_val = int(config[cfg_name][item_name])
@@ -122,6 +135,8 @@ def check_setting_int(config, cfg_name, item_name, def_val):
 #################################################################################
 ## Check_setting_float                                                          #
 #################################################################################
+
+
 ##def check_setting_float(config, cfg_name, item_name, def_val):
 ##    try:
 ##        my_val = float(config[cfg_name][item_name])
@@ -138,6 +153,8 @@ def check_setting_int(config, cfg_name, item_name, def_val):
 ################################################################################
 # Check_setting_str                                                            #
 ################################################################################
+
+
 def check_setting_str(config, cfg_name, item_name, def_val, log=True):
     try:
         my_val = config[cfg_name][item_name]
@@ -155,6 +172,7 @@ def check_setting_str(config, cfg_name, item_name, def_val, log=True):
         logger.debug(item_name + " -> ******")
 
     return my_val
+
 
 def initialize():
 
@@ -249,6 +267,7 @@ def initialize():
         __INITIALIZED__ = True
         return True
 
+
 def daemonize():
     """
     Fork off as a daemon
@@ -256,12 +275,12 @@ def daemonize():
 
     # Make a non-session-leader child process
     try:
-        pid = os.fork() #@UndefinedVariable - only available in UNIX
+        pid = os.fork()  #@UndefinedVariable - only available in UNIX
         if pid != 0:
             sys.exit(0)
     except OSError, e:
         raise RuntimeError("1st fork failed: %s [%d]" %
-                   (e.strerror, e.errno))
+                          (e.strerror, e.errno))
 
     os.setsid() #@UndefinedVariable - only available in UNIX
 
@@ -286,6 +305,7 @@ def daemonize():
         logger.debug(u"Writing PID " + pid + " to " + str(PIDFILE))
         file(PIDFILE, 'w').write("%s\n" % pid)
 
+
 def launch_browser(host, port, root):
     if host == '0.0.0.0':
         host = 'localhost'
@@ -294,6 +314,7 @@ def launch_browser(host, port, root):
         webbrowser.open('http://%s:%i%s' % (host, port, root))
     except Exception, e:
         logger.error('Could not launch browser: %s' % e)
+
 
 def config_write():
     new_config = ConfigObj()
@@ -344,10 +365,11 @@ def config_write():
 
     new_config.write()
 
+
 def dbcheck():
 
-    conn=sqlite3.connect(DBFILE)
-    c=conn.cursor()
+    conn = sqlite3.connect(DBFILE)
+    c = conn.cursor()
     c.execute('CREATE TABLE IF NOT EXISTS authors (AuthorID TEXT, AuthorName TEXT UNIQUE, AuthorImg TEXT, AuthorLink TEXT, DateAdded TEXT, Status TEXT, LastBook TEXT, LastLink Text, LastDate TEXT, HaveBooks INTEGER, TotalBooks INTEGER, AuthorBorn TEXT, AuthorDeath TEXT)')
     c.execute('CREATE TABLE IF NOT EXISTS books (AuthorID TEXT, AuthorName TEXT, AuthorLink TEXT, BookName TEXT, BookSub TEXT, BookDesc TEXT, BookGenre TEXT, BookIsbn TEXT, BookPub TEXT, BookRate INTEGER, BookImg TEXT, BookPages INTEGER, BookLink TEXT, BookID TEXT UNIQUE, BookDate TEXT, BookLang TEXT, BookAdded TEXT, Status TEXT)')
     c.execute('CREATE TABLE IF NOT EXISTS wanted (BookID TEXT, NZBurl TEXT, NZBtitle TEXT, NZBdate TEXT, NZBprov TEXT, Status TEXT)')
@@ -374,12 +396,13 @@ def dbcheck():
     conn.commit()
     c.close()
 
+
 def start():
     global __INITIALIZED__, started
 
     if __INITIALIZED__:
 
-        # Crons and scheduled jobs go here
+        # Cron and scheduled jobs go here
         starttime = datetime.datetime.now()
         SCHED.add_interval_job(postprocess.processDir, minutes=SCAN_INTERVAL, start_date=starttime+datetime.timedelta(minutes=1))
         SCHED.add_interval_job(searchnzb.searchbook, minutes=SEARCH_INTERVAL, start_date=starttime+datetime.timedelta(hours=1))
@@ -389,6 +412,7 @@ def start():
 #            print job
         started = True
 
+
 def shutdown(restart=False):
     config_write()
     logger.info('LazyLibrarian is shutting down ...')
@@ -396,7 +420,7 @@ def shutdown(restart=False):
 
     SCHED.shutdown(wait=True)
 
-    if PIDFILE :
+    if PIDFILE:
         logger.info('Removing pidfile %s' % PIDFILE)
         os.remove(PIDFILE)
 
@@ -408,5 +432,5 @@ def shutdown(restart=False):
             popen_list += ['--nolaunch']
             logger.info('Restarting LazyLibrarian with ' + str(popen_list))
         subprocess.Popen(popen_list, cwd=os.getcwd())
-
+    # TODO Bad way of exiting application, need to figure out why this is in here (Dorbian)
     os._exit(0)

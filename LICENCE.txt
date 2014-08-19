@@ -1,0 +1,4 @@
+This application uses code taken from Sickbeard, Couchpotato and Headphones.
+Any code that was taken from other sources then LazyLibrarian itself, is marked as such.
+
+If you feel that there is code within this application that is yours ( with proper evidence that this is indeed your code ) then you will be properly accredited as such.
