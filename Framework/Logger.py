@@ -34,8 +34,11 @@ class Loch(object):
         logger = logging.getLogger(self.loggername)
         logger.setLevel(self.level)
 
+        if not os.path.exists(self.logdir):
+            os.makedirs(self.logdir)
+
         self.logfilelocation = os.path.join(self.logdir, self.filename)
-        formatter = logging.Formatter('%(asctimes) - %(levelname)-7s :: %(message)s', '%d-%b-%Y %H:%M:%S')
+        formatter = logging.Formatter('%(asctime)s - %(levelname)-7s :: %(message)s', '%d-%b-%Y %H:%M:%S')
         handler = handlers.RotatingFileHandler(self.logfilelocation, maxBytes=self.maxsize, backupCount=self.maxfiles, )
         handler.setLevel(self.level)
 
@@ -52,8 +55,8 @@ class Loch(object):
         logger = logging.getLogger(self.loggername)
         thread = threading.currentThread().getName()
 
-        if self._verbose:
-            print("[{0}]-[{3}]::{2}::{1}".format(time.strftime("%Y-%m-%d %H:%M:%S"), msg, lvl, thread))
+        #if self._verbose:
+            #print("[{0}]-[{3}]::{2}::{1}".format(time.strftime("%Y-%m-%d %H:%M:%S"), msg, lvl, thread))
 
         msg = '[{0}]::{1}'.format(thread, msg)
 
