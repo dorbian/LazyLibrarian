@@ -4,8 +4,6 @@ from __future__ import with_statement
 import os
 import sys
 import subprocess
-# review threading isn't used, useless import (Dorbian)
-import threading
 import cherrypy
 import webbrowser
 import sqlite3

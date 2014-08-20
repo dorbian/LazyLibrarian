@@ -63,6 +63,7 @@ class RotatingLogger(object):
         else:
             logger.error(message)
 
+
 lazylibrarian_log = RotatingLogger('lazylibrarian.log', MAX_SIZE, MAX_FILES)
 
 def debug(message):
