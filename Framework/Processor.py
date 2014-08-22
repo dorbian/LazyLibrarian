@@ -11,29 +11,6 @@ import os
 import getopt
 import Logger
 
-#Functions
-def usage():
-    print ("Please specify the filename you would like to parse with -f")
-
-
-def arguments(argv):
-    try:
-        opts, args = getopt.getopt(argv, "hf:d", ["help", "file="])
-    except getopt.GetoptError:
-        usage()
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt in ("-h", "--help"):
-            usage()
-            sys.exit()
-        elif opt == '-d':
-            global _debug
-            _debug = 1
-        elif opt in ("-f", "--file"):
-            global filename
-            filename = arg
-
-
 #Main class
 class PostProcessor(object):
 
@@ -62,6 +39,9 @@ class PostProcessor(object):
         elif self.fileext.lower() == "epub":
             self.epubparser()
             Logger.log("Processing file as a {0} file".format(self.fileext.lower()), 'debug')
+        elif self.fileext.lower() == "pdf":
+            self.pdfparser()
+            Logger.log("Processing file as a {0} file".format(self.fileext.lower()), 'debug')
 
     def mobiparser(self):
         import lib.mobi
@@ -80,9 +60,43 @@ class PostProcessor(object):
         Logger.log("Author found: {0}".format(self.bookauthor), 'debug')
         Logger.log("Title found: {0}".format(self.booktitle), 'debug')
 
+    def pdfparser(self):
+        from lib.pdfminer.pdfparser import PDFParser
+        from lib.pdfminer.pdfdocument import PDFDocument
+        book = open(self.filepath, 'rb')
+        parser = PDFParser(book)
+        docs = PDFDocument(parser)
+        outlines = docs.get_outlines()_
+        for (level, title, dest, a, se) in outlines
+            print (level, title)
+
 
 #Want to test out if a hit comes up, run the script directly with the -f and full
 if __name__ == "__main__":
+    global filename
+    filename = ""
+
+    def usage():
+        print ("Please specify the filename you would like to parse with -f")
+        sys.exit(2)
+
+    def arguments(argv):
+        try:
+            opts, args = getopt.getopt(argv, "hf:d", ["help", "file="])
+        except getopt.GetoptError:
+            usage()
+        for opt, arg in opts:
+            if opt in ("-h", "--help"):
+                usage()
+            elif opt == '-d':
+                global _debug
+                _debug = 1
+            elif opt in ("-f", "--file"):
+                global filename
+                filename = arg
+            else:
+                usage()
+
     arguments(sys.argv[1:])
     processor = PostProcessor()
     processor.nameresolver(filename)
