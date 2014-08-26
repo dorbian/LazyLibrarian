@@ -39,9 +39,9 @@ class PostProcessor(object):
         elif self.fileext.lower() == "epub":
             self.epubparser()
             Logger.log("Processing file as a {0} file".format(self.fileext.lower()), 'debug')
-        elif self.fileext.lower() == "pdf":
-            self.pdfparser()
-            Logger.log("Processing file as a {0} file".format(self.fileext.lower()), 'debug')
+        # elif self.fileext.lower() == "pdf":
+        #     self.pdfparser()
+        #     Logger.log("Processing file as a {0} file".format(self.fileext.lower()), 'debug')
 
     def mobiparser(self):
         import lib.mobi
@@ -60,18 +60,18 @@ class PostProcessor(object):
         Logger.log("Author found: {0}".format(self.bookauthor), 'debug')
         Logger.log("Title found: {0}".format(self.booktitle), 'debug')
 
-    def pdfparser(self):
-        from lib.pdfminer.pdfparser import PDFParser
-        from lib.pdfminer.pdfdocument import PDFDocument
-        book = open(self.filepath, 'rb')
-        parser = PDFParser(book)
-        docs = PDFDocument(parser)
-        outlines = docs.get_outlines()_
-        for (level, title, dest, a, se) in outlines
-            print (level, title)
+    # def pdfparser(self):
+    #     from lib.pdfminer.pdfparser import PDFParser
+    #     from lib.pdfminer.pdfdocument import PDFDocument
+    #     book = open(self.filepath, 'rb')
+    #     parser = PDFParser(book)
+    #     docs = PDFDocument(parser)
+    #     outlines = docs.get_outlines()_
+    #     for (level, title, dest, a, se) in outlines
+    #         print (level, title)
 
 
-#Want to test out if a hit comes up, run the script directly with the -f and full
+#Want to test out if a hit comes up, run the script directly with the -f and full file path
 if __name__ == "__main__":
     global filename
     filename = ""
@@ -80,12 +80,13 @@ if __name__ == "__main__":
         print ("Please specify the filename you would like to parse with -f")
         sys.exit(2)
 
-    def arguments(argv):
-        try:
-            opts, args = getopt.getopt(argv, "hf:d", ["help", "file="])
-        except getopt.GetoptError:
+    def arguments():
+        opts, args = getopt.getopt(sys.argv[1:], "hf:d", ["help", "file="])
+        if len(args) != 1:
+            Logger.log("No arguments passed!", 'trace')
             usage()
         for opt, arg in opts:
+            Logger.log("Args: {0}".format(arg), 'trace')
             if opt in ("-h", "--help"):
                 usage()
             elif opt == '-d':
@@ -97,7 +98,8 @@ if __name__ == "__main__":
             else:
                 usage()
 
-    arguments(sys.argv[1:])
+    Logger.log("Parsing Arguments", 'debug')
+    arguments()
     processor = PostProcessor()
     processor.nameresolver(filename)
     Author = processor.bookauthor
