@@ -2,6 +2,10 @@
 import re
 import struct
 import logging
+
+from lib.pdfminer import arcfour as ARC4
+
+
 try:
     import hashlib as md5
 except ImportError:
@@ -12,27 +16,26 @@ try:
     from Crypto.Hash import SHA256
 except ImportError:
     AES = SHA256 = None
-    from . import arcfour as ARC4
-from .psparser import PSEOF
-from .psparser import literal_name
-from .psparser import LIT
-from .psparser import KWD
-from .psparser import STRICT
-from .pdftypes import PDFException
-from .pdftypes import PDFTypeError
-from .pdftypes import PDFStream
-from .pdftypes import PDFObjectNotFound
-from .pdftypes import decipher_all
-from .pdftypes import int_value
-from .pdftypes import str_value
-from .pdftypes import list_value
-from .pdftypes import dict_value
-from .pdftypes import stream_value
-from .pdfparser import PDFSyntaxError
-from .pdfparser import PDFStreamParser
-from .utils import choplist
-from .utils import nunpack
-from .utils import decode_text
+from .lib.pdfminer.psparser import PSEOF
+from .lib.pdfminer.psparser import literal_name
+from .lib.pdfminer.psparser import LIT
+from .lib.pdfminer.psparser import KWD
+from .lib.pdfminer.psparser import STRICT
+from .lib.pdfminer.pdftypes import PDFException
+from .lib.pdfminer.pdftypes import PDFTypeError
+from .lib.pdfminer.pdftypes import PDFStream
+from .lib.pdfminer.pdftypes import PDFObjectNotFound
+from .lib.pdfminer.pdftypes import decipher_all
+from .lib.pdfminer.pdftypes import int_value
+from .lib.pdfminer.pdftypes import str_value
+from .lib.pdfminer.pdftypes import list_value
+from .lib.pdfminer.pdftypes import dict_value
+from .lib.pdfminer.pdftypes import stream_value
+from .lib.pdfminer.pdfparser import PDFSyntaxError
+from .lib.pdfminer.pdfparser import PDFStreamParser
+from .lib.pdfminer.utils import choplist
+from .lib.pdfminer.utils import nunpack
+from .lib.pdfminer.utils import decode_text
 
 
 ##  Exceptions

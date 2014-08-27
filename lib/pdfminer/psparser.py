@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 import re
 import logging
-from .utils import choplist
+
+from .lib.pdfminer.utils import choplist
+
 
 STRICT = 0
 

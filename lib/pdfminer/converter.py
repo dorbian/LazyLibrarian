@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 import logging
 import re
+
 from .pdfdevice import PDFTextDevice
-from .pdffont import PDFUnicodeNotDefined
+from .lib.pdfminer.pdffont import PDFUnicodeNotDefined
 from .layout import LTContainer
 from .layout import LTPage
 from .layout import LTText
@@ -20,6 +21,7 @@ from .utils import apply_matrix_pt
 from .utils import mult_matrix
 from .utils import enc
 from .utils import bbox2str
+
 
 
 ##  PDFLayoutAnalyzer

@@ -3,10 +3,11 @@ import struct
 import os
 import os.path
 from io import BytesIO
+
 from .pdftypes import LITERALS_DCT_DECODE
-from .pdfcolor import LITERAL_DEVICE_GRAY
-from .pdfcolor import LITERAL_DEVICE_RGB
-from .pdfcolor import LITERAL_DEVICE_CMYK
+from .lib.pdfminer.pdfcolor import LITERAL_DEVICE_GRAY
+from .lib.pdfminer.pdfcolor import LITERAL_DEVICE_RGB
+from .lib.pdfminer.pdfcolor import LITERAL_DEVICE_CMYK
 
 
 def align32(x):

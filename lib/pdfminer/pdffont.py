@@ -2,6 +2,7 @@
 import sys
 import struct
 from io import BytesIO
+
 from .cmapdb import CMapDB
 from .cmapdb import CMapParser
 from .cmapdb import FileUnicodeMap
@@ -23,10 +24,10 @@ from .pdftypes import list_value
 from .pdftypes import dict_value
 from .pdftypes import stream_value
 from .fontmetrics import FONT_METRICS
-from .utils import apply_matrix_norm
-from .utils import nunpack
-from .utils import choplist
-from .utils import isnumber
+from .lib.pdfminer.utils import apply_matrix_norm
+from .lib.pdfminer.utils import nunpack
+from .lib.pdfminer.utils import choplist
+from .lib.pdfminer.utils import isnumber
 
 
 def get_widths(seq):

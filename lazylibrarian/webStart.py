@@ -1,7 +1,10 @@
-import os, sys, cherrypy
+import os
+import sys
+import cherrypy
 import lazylibrarian
 
 from lazylibrarian.webServe import WebInterface
+
 
 def initialize(options={}):
 
@@ -44,13 +47,13 @@ def initialize(options={}):
             'tools.auth_basic.on': True,
             'tools.auth_basic.realm': 'LazyLibrarian',
             'tools.auth_basic.checkpassword':  cherrypy.lib.auth_basic.checkpassword_dict(
-                {options['http_user']:options['http_pass']})
+                {options['http_user']: options['http_pass']})
         })
 
 
     # Prevent time-outs
     cherrypy.engine.timeout_monitor.unsubscribe()
-    cherrypy.tree.mount(WebInterface(), options['http_root'], config = conf)
+    cherrypy.tree.mount(WebInterface(), options['http_root'], config=conf)
 
     cherrypy.engine.autoreload.subscribe()
 

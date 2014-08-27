@@ -15,6 +15,8 @@ from lib.apscheduler.scheduler import Scheduler
 
 import threading
 
+LOGDIR = "./logs/"
+
 from lazylibrarian import logger, postprocess, searchnzb
 
 FULL_PATH = None
@@ -40,7 +42,6 @@ DBFILE = None
 CONFIGFILE = None
 CFG = None
 
-LOGDIR = None
 LOGLIST = []
 
 HTTP_HOST = None
@@ -85,6 +86,7 @@ NEWZBIN_PASSWORD = None
 SEARCH_INTERVAL = 360
 SCAN_INTERVAL = 10
 
+FIRSTSTART = 1
 
 def CheckSection(sec):
     """ Check if INI section exists, if not create it """
@@ -127,7 +129,7 @@ def check_setting_int(config, cfg_name, item_name, def_val):
         except:
             config[cfg_name] = {}
             config[cfg_name][item_name] = my_val
-    logger.debug(item_name + " -> " + str(my_val))
+    #logger.debug(item_name + " -> " + str(my_val))
     return my_val
 
 #################################################################################
@@ -164,10 +166,10 @@ def check_setting_str(config, cfg_name, item_name, def_val, log=True):
             config[cfg_name] = {}
             config[cfg_name][item_name] = my_val
 
-    if log:
-        logger.debug(item_name + " -> " + my_val)
-    else:
-        logger.debug(item_name + " -> ******")
+    # if log:
+    #     logger.debug(item_name + " -> " + my_val)
+    # else:
+    #     logger.debug(item_name + " -> ******")
 
     return my_val
 
@@ -178,7 +180,7 @@ def initialize():
 
         global __INITIALIZED__, FULL_PATH, PROG_DIR, LOGLEVEL, DAEMON, DATADIR, CONFIGFILE, CFG, LOGDIR, HTTP_HOST, HTTP_PORT, HTTP_USER, HTTP_PASS, HTTP_ROOT, HTTP_LOOK, LAUNCH_BROWSER, LOGDIR, CACHEDIR, \
             IMP_ONLYISBN, IMP_PREFLANG, SAB_HOST, SAB_PORT, SAB_API, SAB_USER, SAB_PASS, DESTINATION_DIR, DESTINATION_COPY, DOWNLOAD_DIR, SAB_CAT, USENET_RETENTION, BLACKHOLE, BLACKHOLEDIR, GR_API, \
-            NZBMATRIX, NZBMATRIX_USER, NZBMATRIX_API, NEWZNAB, NEWZNAB_HOST, NEWZNAB_API, NEWZBIN, NEWZBIN_UID, NEWZBIN_PASS
+            NZBMATRIX, NZBMATRIX_USER, NZBMATRIX_API, NEWZNAB, NEWZNAB_HOST, NEWZNAB_API, NEWZBIN, NEWZBIN_UID, NEWZBIN_PASS, _trace, _debug, FIRSTSTART
 
         if __INITIALIZED__:
             return False
@@ -233,6 +235,7 @@ def initialize():
         NEWZBIN_UID = check_setting_str(CFG, 'Newzbin', 'newzbin_uid', '')
         NEWZBIN_PASS = check_setting_str(CFG, 'Newzbin', 'newzbin_pass', '')
 
+        FIRSTSTART = bool(check_setting_int(CFG, 'General', 'FirstStart', 0))
         if not LOGDIR:
             LOGDIR = os.path.join(DATADIR, 'Logs')
 
@@ -242,7 +245,7 @@ def initialize():
             try:
                 os.makedirs(CACHEDIR)
             except OSError:
-                logger.error('Could not create cachedir. Check permissions of: ' + DATADIR)
+                logger.log('Could not create cachedir. Check permissions of: {0}'.format(DATADIR), "error")
 
         # Create logdir
         if not os.path.exists(LOGDIR):
@@ -253,8 +256,6 @@ def initialize():
                     print LOGDIR + ":"
                     print ' Unable to create folder for logs. Only logging to console.'
 
-        # Start the logger, silence console logging if we need to
-        logger.lazylibrarian_log.initLogger(loglevel=LOGLEVEL)
 
         # Initialize the database
         try:

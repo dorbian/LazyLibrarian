@@ -58,41 +58,41 @@ class WebInterface(object):
 
     def config(self):
         http_look_dir = os.path.join(lazylibrarian.PROG_DIR, 'data/interfaces/')
-        http_look_list = [ name for name in os.listdir(http_look_dir) if os.path.isdir(os.path.join(http_look_dir, name)) ]
+        http_look_list = [name for name in os.listdir(http_look_dir) if os.path.isdir(os.path.join(http_look_dir, name))]
 
         config = {
-                    "http_host":        lazylibrarian.HTTP_HOST,
-                    "http_user":        lazylibrarian.HTTP_USER,
-                    "http_port":        lazylibrarian.HTTP_PORT,
-                    "http_pass":        lazylibrarian.HTTP_PASS,
-                    "http_look":        lazylibrarian.HTTP_LOOK,
-                    "http_look_list":   http_look_list,
-                    "launch_browser":   checked(lazylibrarian.LAUNCH_BROWSER),
-                    "logdir" :          lazylibrarian.LOGDIR,
-                    "use_imp_onlyisbn": checked(lazylibrarian.IMP_ONLYISBN),
-                    "imp_preflang":     lazylibrarian.IMP_PREFLANG,
-                    "sab_host":         lazylibrarian.SAB_HOST,
-                    "sab_port":         lazylibrarian.SAB_PORT,
-                    "sab_api":          lazylibrarian.SAB_API,
-                    "sab_user":         lazylibrarian.SAB_USER,
-                    "sab_pass":         lazylibrarian.SAB_PASS,
-                    "use_destination_copy": checked(lazylibrarian.DESTINATION_COPY),
-                    "destination_dir":  lazylibrarian.DESTINATION_DIR,
-                    "download_dir":     lazylibrarian.DOWNLOAD_DIR,
-                    "sab_cat":          lazylibrarian.SAB_CAT,
-                    "usenet_retention": lazylibrarian.USENET_RETENTION,
-                    "use_blackhole":    checked(lazylibrarian.BLACKHOLE),
-                    "blackholedir":     lazylibrarian.BLACKHOLEDIR,
-                    "use_nzbmatrix" :   checked(lazylibrarian.NZBMATRIX),
-                    "nzbmatrix_user" :  lazylibrarian.NZBMATRIX_USER,
-                    "nzbmatrix_api" :   lazylibrarian.NZBMATRIX_API,
-                    "use_newznab" :     checked(lazylibrarian.NEWZNAB),
-                    "newznab_host" :    lazylibrarian.NEWZNAB_HOST,
-                    "newznab_api" :     lazylibrarian.NEWZNAB_API,
-                    "use_newzbin" :     checked(lazylibrarian.NEWZBIN),
-                    "newzbin_uid" :     lazylibrarian.NEWZBIN_UID,
-                    "newzbin_pass" :    lazylibrarian.NEWZBIN_PASS,
-                }
+            "http_host":        lazylibrarian.HTTP_HOST,
+            "http_user":        lazylibrarian.HTTP_USER,
+            "http_port":        lazylibrarian.HTTP_PORT,
+            "http_pass":        lazylibrarian.HTTP_PASS,
+            "http_look":        lazylibrarian.HTTP_LOOK,
+            "http_look_list":   http_look_list,
+            "launch_browser":   checked(lazylibrarian.LAUNCH_BROWSER),
+            "logdir" :          lazylibrarian.LOGDIR,
+            "use_imp_onlyisbn": checked(lazylibrarian.IMP_ONLYISBN),
+            "imp_preflang":     lazylibrarian.IMP_PREFLANG,
+            "sab_host":         lazylibrarian.SAB_HOST,
+            "sab_port":         lazylibrarian.SAB_PORT,
+            "sab_api":          lazylibrarian.SAB_API,
+            "sab_user":         lazylibrarian.SAB_USER,
+            "sab_pass":         lazylibrarian.SAB_PASS,
+            "use_destination_copy": checked(lazylibrarian.DESTINATION_COPY),
+            "destination_dir":  lazylibrarian.DESTINATION_DIR,
+            "download_dir":     lazylibrarian.DOWNLOAD_DIR,
+            "sab_cat":          lazylibrarian.SAB_CAT,
+            "usenet_retention": lazylibrarian.USENET_RETENTION,
+            "use_blackhole":    checked(lazylibrarian.BLACKHOLE),
+            "blackholedir":     lazylibrarian.BLACKHOLEDIR,
+            "use_nzbmatrix" :   checked(lazylibrarian.NZBMATRIX),
+            "nzbmatrix_user" :  lazylibrarian.NZBMATRIX_USER,
+            "nzbmatrix_api" :   lazylibrarian.NZBMATRIX_API,
+            "use_newznab" :     checked(lazylibrarian.NEWZNAB),
+            "newznab_host" :    lazylibrarian.NEWZNAB_HOST,
+            "newznab_api" :     lazylibrarian.NEWZNAB_API,
+            "use_newzbin" :     checked(lazylibrarian.NEWZBIN),
+            "newzbin_uid" :     lazylibrarian.NEWZBIN_UID,
+            "newzbin_pass" :    lazylibrarian.NEWZBIN_PASS,
+        }
         return serve_template(templatename="config.html", title="Settings", config=config)    
     config.exposed = True
 
@@ -157,14 +157,14 @@ class WebInterface(object):
     def authorPage(self, AuthorName, BookLang=None):
         myDB = database.DBConnection()
 
-        languages = myDB.select('SELECT DISTINCT BookLang from books WHERE AuthorName=?', [AuthorName.replace("'","''")])
+        languages = myDB.select('SELECT DISTINCT BookLang from books WHERE AuthorName=?', [AuthorName.replace("'", "''")])
 
         if BookLang:
-            querybooks = "SELECT * from books WHERE BookLang='%s' AND AuthorName='%s' order by BookName ASC" % (BookLang, AuthorName.replace("'","''"))
+            querybooks = "SELECT * from books WHERE BookLang='%s' AND AuthorName='%s' order by BookName ASC" % (BookLang, AuthorName.replace("'", "''"))
         else:
-            querybooks = "SELECT * from books WHERE AuthorName='%s' order by BookName ASC" % AuthorName.replace("'","''")
+            querybooks = "SELECT * from books WHERE AuthorName='%s' order by BookName ASC" % AuthorName.replace("'", "''")
 
-        queryauthors = "SELECT * from authors WHERE AuthorName='%s'" % AuthorName.replace("'","''")
+        queryauthors = "SELECT * from authors WHERE AuthorName='%s'" % AuthorName.replace("'", "''")
 
         author = myDB.action(queryauthors).fetchone()
         books = myDB.select(querybooks)

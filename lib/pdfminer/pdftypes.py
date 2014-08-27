@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 import zlib
+
 from .lzw import lzwdecode
 from .ascii85 import ascii85decode
 from .ascii85 import asciihexdecode
-from .runlength import rldecode
+from .lib.pdfminer.runlength import rldecode
 from .ccitt import ccittfaxdecode
 from .psparser import PSException
 from .psparser import PSObject

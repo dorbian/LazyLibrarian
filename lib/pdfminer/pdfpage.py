@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import logging
+
 from .psparser import LIT
 from .pdftypes import PDFObjectNotFound
 from .pdftypes import resolve1
@@ -7,8 +8,9 @@ from .pdftypes import int_value
 from .pdftypes import list_value
 from .pdftypes import dict_value
 from .pdfparser import PDFParser
-from .pdfdocument import PDFDocument
-from .pdfdocument import PDFTextExtractionNotAllowed
+from .lib.pdfminer.pdfdocument import PDFDocument
+from .lib.pdfminer.pdfdocument import PDFTextExtractionNotAllowed
+
 
 # some predefined literals and keywords.
 LITERAL_PAGE = LIT('Page')

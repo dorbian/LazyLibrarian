@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import re
-from .psparser import PSLiteral
+
+from .lib.pdfminer.psparser import PSLiteral
 from .glyphlist import glyphname2unicode
 from .latin_enc import ENCODING
 

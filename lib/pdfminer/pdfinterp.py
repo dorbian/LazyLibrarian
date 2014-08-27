@@ -2,6 +2,7 @@
 import re
 import logging
 from io import BytesIO
+
 from .cmapdb import CMapDB
 from .cmapdb import CMap
 from .psparser import PSTypeError
@@ -20,16 +21,17 @@ from .pdftypes import resolve1
 from .pdftypes import list_value
 from .pdftypes import dict_value
 from .pdftypes import stream_value
-from .pdffont import PDFFontError
-from .pdffont import PDFType1Font
-from .pdffont import PDFTrueTypeFont
-from .pdffont import PDFType3Font
-from .pdffont import PDFCIDFont
+from .lib.pdfminer.pdffont import PDFFontError
+from .lib.pdfminer.pdffont import PDFType1Font
+from .lib.pdfminer.pdffont import PDFTrueTypeFont
+from .lib.pdfminer.pdffont import PDFType3Font
+from .lib.pdfminer.pdffont import PDFCIDFont
 from .pdfcolor import PDFColorSpace
 from .pdfcolor import PREDEFINED_COLORSPACE
 from .utils import choplist
 from .utils import mult_matrix
 from .utils import MATRIX_IDENTITY
+
 
 
 ##  Exceptions

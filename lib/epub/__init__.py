@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Library to open and read files in the epub version 2."""
 from __future__ import unicode_literals
+from lib.epub import utils, opf, ncx
 
 
 __author__ = 'Florian Strzelecki <florian.strzelecki@gmail.com>'
@@ -17,8 +18,6 @@ import zipfile
 
 
 from xml.dom import minidom
-
-import ncx, opf, utils
 
 
 MIMETYPE_EPUB = 'application/epub+zip'

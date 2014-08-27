@@ -12,7 +12,7 @@ from struct import *
 from pprint import pprint
 
 import utils
-from lz77 import uncompress_lz77
+from lib.mobi.lz77 import uncompress_lz77
 
 
 class Mobi:

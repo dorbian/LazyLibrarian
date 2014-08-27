@@ -1,13 +1,13 @@
 #!/usr/bin/env python
-from .utils import INF
-from .utils import Plane
-from .utils import get_bound
-from .utils import uniq
-from .utils import csort
-from .utils import fsplit
-from .utils import bbox2str
-from .utils import matrix2str
-from .utils import apply_matrix_pt
+from .lib.pdfminer.utils import INF
+from .lib.pdfminer.utils import Plane
+from .lib.pdfminer.utils import get_bound
+from .lib.pdfminer.utils import uniq
+from .lib.pdfminer.utils import csort
+from .lib.pdfminer.utils import fsplit
+from .lib.pdfminer.utils import bbox2str
+from .lib.pdfminer.utils import matrix2str
+from .lib.pdfminer.utils import apply_matrix_pt
 
 
 ##  IndexAssigner

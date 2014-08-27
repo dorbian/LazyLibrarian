@@ -1,79 +1,108 @@
-import os, threading, logging
+__author__ = 'dorbian'
+__version__ = '1.0'
 
+import os
+import threading
+import logging
 from logging import handlers
 
-import lazylibrarian
-from lazylibrarian import formatter
 
-MAX_SIZE = 1000000 # 1mb
-MAX_FILES = 5
+class Loch(object):
 
+    def __init__(self):
+        self.filename = "lazylibrarian.log"
+        self.maxsize = 1000000
+        self.maxfiles = 5
+        self.logdir = os.path.abspath("./Logs")
+        self.loggername = __name__  # "TraceLogger"
+        self.level = 9
+        self.logfilelocation = ""
+        self._debug = True
+        self._trace = True
 
-# Simple rotating log handler that uses RotatingFileHandler
-class RotatingLogger(object):
+    def initialize(self):
+        logging.addLevelName(9, "TRACE")
+        logger = logging.getLogger(self.loggername)
+        logger.setLevel(self.level)
 
-    def __init__(self, filename, max_size, max_files):
+        def trace(self, message, *args, **kws):
+            self._log(9, message, args, **kws)
+        logging.Logger.trace = trace
 
-        self.filename = filename
-        self.max_size = max_size
-        self.max_files = max_files
+        if not os.path.exists(self.logdir):
+            os.makedirs(self.logdir)
 
-    def initLogger(self, loglevel=1):
+        self.logfilelocation = os.path.join(self.logdir, self.filename)
+        formatter = logging.Formatter('%(asctime)s:[%(levelname)-5s]\t%(message)s', '%d-%b-%Y %H:%M:%S')
+        handler = handlers.RotatingFileHandler(self.logfilelocation, maxBytes=self.maxsize, backupCount=self.maxfiles, )
+        handler.setLevel(self.level)
 
-        l = logging.getLogger('lazylibrarian')
-        l.setLevel(logging.DEBUG)
+        streamhandler = logging.StreamHandler()
+        streamhandler.setLevel(logging.INFO)
+        if self._debug:
+            streamhandler.setLevel(10)
+        if self._trace:
+            streamhandler.setLevel(9)
+        streamhandler.setFormatter(formatter)
+        handler.setFormatter(formatter)
+        logger.addHandler(handler)
+        logger.addHandler(streamhandler)
 
-        self.filename = os.path.join(lazylibrarian.LOGDIR, self.filename)
+    def log(self, msg, lvl):
 
-        filehandler = handlers.RotatingFileHandler(self.filename, maxBytes=self.max_size, backupCount=self.max_files)
-        filehandler.setLevel(logging.DEBUG)
+        logger = logging.getLogger(self.loggername)
+        thread = threading.currentThread().getName()
 
-        fileformatter = logging.Formatter('%(asctime)s - %(levelname)-7s :: %(message)s', '%d-%b-%Y %H:%M:%S')
+        #if self._verbose:
+            #print("[{0}]-[{3}]::{2}::{1}".format(time.strftime("%Y-%m-%d %H:%M:%S"), msg, lvl, thread))
 
-        filehandler.setFormatter(fileformatter)
-        l.addHandler(filehandler)
+        msg = '[{0}]\t{1}'.format(thread, msg)
 
-        if loglevel:
-            consolehandler = logging.StreamHandler()
-            if loglevel == 1:
-                consolehandler.setLevel(logging.INFO)
-            if loglevel == 2:
-                consolehandler.setLevel(logging.DEBUG)
-            consoleformatter = logging.Formatter('%(asctime)s - %(levelname)s :: %(message)s', '%d-%b-%Y %H:%M:%S')
-            consolehandler.setFormatter(consoleformatter)
-            l.addHandler(consolehandler)
-
-    def log(self, message, level):
-
-        logger = logging.getLogger('lazylibrarian')
-
-        threadname = threading.currentThread().getName()
-
-        if level != 'DEBUG':
-            lazylibrarian.LOGLIST.insert(0, (formatter.now(), message, level, threadname))
-
-        message = threadname + ' : ' + message
-
-        if level == 'DEBUG':
-            logger.debug(message)
-        elif level == 'INFO':
-            logger.info(message)
-        elif level == 'WARNING':
-            logger.warn(message)
+        if lvl == 'DEBUG' and self._debug:
+            logger.debug(msg)
+        elif lvl == 'INFO':
+            logger.info(msg)
+        elif lvl == 'WARN':
+            logger.warn(msg)
+        elif lvl == 'ERROR':
+            logger.error(msg)
+        elif lvl == 'TRACE' and self._trace:
+            logger.trace(msg)
         else:
-            logger.error(message)
+            logger.error("***UNKNOWN*** {0}".format(msg))
+
+logwriter = Loch()
+logwriter.initialize()
 
 
-lazylibrarian_log = RotatingLogger('lazylibrarian.log', MAX_SIZE, MAX_FILES)
+#New format logging IMHO a better practice
+def log(message, level):
+    if str(level).lower() == 'debug':
+        logwriter.log(message, lvl='DEBUG')
+    elif str(level).lower() == 'info':
+        logwriter.log(message, lvl='INFO')
+    elif str(level).lower() == 'warning':
+        logwriter.log(message, lvl='WARN')
+    elif str(level).lower() == 'error':
+        logwriter.log(message, lvl='ERROR')
+    elif str(level).lower() == 'trace':
+        logwriter.log(message, lvl='TRACE')
+    else:
+        logwriter.log(message, lvl='')
 
+
+#Legacy Logging, will be moved over to new format
 def debug(message):
-    lazylibrarian_log.log(message, level='DEBUG')
+    log(message, 'DEBUG')
+
 
 def info(message):
-    lazylibrarian_log.log(message, level='INFO')
+    log(message, 'INFO')
+
 
 def warn(message):
-    lazylibrarian_log.log(message, level='WARNING')
+    log(message, 'WARNING')
+
 
 def error(message):
-    lazylibrarian_log.log(message, level='ERROR')
+    log(message, 'ERROR')

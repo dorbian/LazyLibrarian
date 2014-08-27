@@ -21,15 +21,15 @@ except ImportError:
     import pickle as pickle
 import struct
 import logging
-from .psparser import PSStackParser
-from .psparser import PSSyntaxError
-from .psparser import PSEOF
-from .psparser import PSLiteral
-from .psparser import literal_name
-from .psparser import KWD
-from .encodingdb import name2unicode
-from .utils import choplist
-from .utils import nunpack
+from .lib.pdfminer.psparser import PSStackParser
+from .lib.pdfminer.psparser import PSSyntaxError
+from .lib.pdfminer.psparser import PSEOF
+from .lib.pdfminer.psparser import PSLiteral
+from .lib.pdfminer.psparser import literal_name
+from .lib.pdfminer.psparser import KWD
+from .lib.pdfminer.encodingdb import name2unicode
+from .lib.pdfminer.utils import choplist
+from .lib.pdfminer.utils import nunpack
 
 
 class CMapError(Exception):
