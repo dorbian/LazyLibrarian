@@ -20,23 +20,23 @@ def initialize(options={}):
         '/': {
             'tools.staticdir.root': os.path.join(lazylibrarian.PROG_DIR, 'data')
         },
-        '/interfaces':{
+        '/interfaces': {
             'tools.staticdir.on': True,
             'tools.staticdir.dir': "interfaces"
         },
-        '/images':{
+        '/images': {
             'tools.staticdir.on': True,
             'tools.staticdir.dir': "images"
         },
-        '/css':{
+        '/css': {
             'tools.staticdir.on': True,
             'tools.staticdir.dir': "css"
         },
-        '/js':{
+        '/js': {
             'tools.staticdir.on': True,
             'tools.staticdir.dir': "js"
         },
-        '/favicon.ico':{
+        '/favicon.ico': {
             'tools.staticfile.on': True,
             'tools.staticfile.filename': "images/favicon.ico"
         }

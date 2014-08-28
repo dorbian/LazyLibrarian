@@ -33,7 +33,7 @@ class Loch(object):
             os.makedirs(self.logdir)
 
         self.logfilelocation = os.path.join(self.logdir, self.filename)
-        formatter = logging.Formatter('%(asctime)s:[%(levelname)-5s]\t%(message)s', '%d-%b-%Y %H:%M:%S')
+        formatter = logging.Formatter('%(asctime)s:[%(levelname)s]\t%(message)s', '%d-%b-%Y %H:%M:%S')
         handler = handlers.RotatingFileHandler(self.logfilelocation, maxBytes=self.maxsize, backupCount=self.maxfiles, )
         handler.setLevel(self.level)
 

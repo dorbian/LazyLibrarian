@@ -4,7 +4,8 @@ from mako.template import Template
 from mako.lookup import TemplateLookup
 from mako import exceptions
 
-import threading, time
+import threading
+import time
 
 import lazylibrarian
 
@@ -32,14 +33,23 @@ def serve_template(templatename, **kwargs):
 class WebInterface(object):
 
     def index(self):
-        raise cherrypy.HTTPRedirect("home")
-    index.exposed=True
+        if lazylibrarian.FIRSTSTART == 1:
+            logger.log("Setup flag not set, running setup", "INFO")
+            raise cherrypy.HTTPRedirect("setup")
+        else:
+            logger.log("Setup flag set, running normally", "INFO")
+            raise cherrypy.HTTPRedirect("home")
+    index.exposed = True
 
     def home(self):
         myDB = database.DBConnection()
         authors = myDB.select('SELECT * from authors order by AuthorName COLLATE NOCASE')
         return serve_template(templatename="index.html", title="Home", authors=authors)
     home.exposed = True
+
+    def setup(self):
+        return serve_template(templatename="setup.html", title="Setup")
+    setup.exposed = True
 
     def books(self, BookLang=None):
         myDB = database.DBConnection()
